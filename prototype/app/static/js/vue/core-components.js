@@ -93,3 +93,88 @@ const BaseDropdown = {
     }
   }
 }
+
+const BaseFileUploader = {
+  props: {
+    initUploadUrl: {
+      type: String,
+      required: true
+    },
+  },
+  data() {
+    return {
+      uploadUrl: this.initUploadUrl,
+      file: ''
+    }
+  },
+  methods: {
+    handleFileUpload() {
+      this.file = this.$refs.file.files[0]
+      this.$refs.filename.innerHTML = this.file.name
+    },
+    submitFile() {
+      let formData = new FormData()
+      formData.append('file', this.file);
+
+      axios.post(
+        this.uploadUrl,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+      .then(response => {
+        console.log(this.file)
+      })
+      .catch(error => {
+        if (error.response) {
+          console.log(error.response)
+        } else if (error.request) {
+          console.log(error.request)
+        } else {
+          console.log(error.message)
+        }
+        console.log(error.config)
+      })
+      .finally(() => {
+
+      })
+    }
+  },
+  template: `
+    <div class="file has-name is-fullwidth">
+
+    <label class="file-label">
+
+    <input 
+    class="file-input" 
+    type="file" 
+    ref="file" 
+    name="resume"
+    @change="handleFileUpload"
+    >
+
+    <span class="file-cta">
+
+    <span class="file-icon">
+    <i class="fas fa-upload"></i>
+    </span>
+
+    <span class="file-label">
+    Choose a file
+    </span>
+
+    </span>
+
+    <span class="file-name" ref="filename">
+    </span>
+
+    </label>
+
+    <button class="button is-primary" @click.prevent="submitFile">Submit</button>
+
+    </div>
+  `
+}

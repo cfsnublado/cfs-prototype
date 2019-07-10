@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<div class="columns">
+<div class="column is-5">
+{% csrf_token %}
+
+<file-uploader
+init-upload-url={% url 'api:upload' %}
+>
+</file-uploader>
+
+</div>
+</div>
+
+{% endblock content %}

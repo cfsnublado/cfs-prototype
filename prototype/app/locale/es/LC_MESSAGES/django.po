@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-09 01:05-0700\n"
+"POT-Creation-Date: 2019-07-10 13:46-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -232,12 +232,17 @@ msgstr ""
 msgid "label_login"
 msgstr "Iniciar sesión"
 
-#: prototype/app/templates/home.html:6
-msgid "page_home_title"
-msgstr "Inicio"
-
+#: prototype/app/templates/base.html:159
 #: prototype/app/templates/includes/_user_menu_items.html:10
 msgid "label_home"
+msgstr "Inicio"
+
+#: prototype/app/templates/base.html:163
+msgid "label_forms"
+msgstr "Formularios"
+
+#: prototype/app/templates/home.html:6
+msgid "page_home_title"
 msgstr "Inicio"
 
 #: prototype/app/templates/includes/_user_menu_items.html:34

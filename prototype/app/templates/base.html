@@ -158,6 +158,10 @@ General
 <a href="{% url 'app:home' %}">
 <i class="fas fa-fw fa-home menu-icon"></i> {% trans 'label_home' %}
 </a>
+
+<a href="{% url 'app:forms' %}">
+<i class="fas fa-fw fa-clone menu-icon"></i> {% trans 'label_forms' %}
+</a>
 </li>
 </ul>
 
@@ -196,6 +200,8 @@ General
 var sidebarExpanded = false;
 </script>
 
+<script src="{% static 'js/axios.min.js' %}"></script>
+<script src="{% static 'js/ajax.js' %}"></script>
 <script src="{% static 'js/vue.js' %}"></script>
 <script src="{% static 'js/vue/core-components.js' %}"></script>
 <script src="{% static 'js/vue/app-components.js' %}"></script>

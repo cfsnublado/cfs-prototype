@@ -48,3 +48,7 @@ const NavbarDropdown = {
     </div>
   `  
 }
+
+const FileUploader = {
+  mixins: [BaseFileUploader]
+}
