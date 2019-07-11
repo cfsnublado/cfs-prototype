@@ -122,3 +122,8 @@ TEMPLATES = [
         },
     },
 ]
+
+# Dropbox
+DBX = {
+    'ACCESS_TOKEN': os.environ['DBX_ACCESS_TOKEN']
+}
