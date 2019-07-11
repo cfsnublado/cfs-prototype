@@ -60,6 +60,7 @@ LOCAL_APPS = [
     'users',
     'core',
     'security',
+    'dbx'
 ]
 
 THIRD_PARTY_APPS = [

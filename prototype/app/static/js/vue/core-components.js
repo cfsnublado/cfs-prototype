@@ -104,7 +104,8 @@ const BaseFileUploader = {
   data() {
     return {
       uploadUrl: this.initUploadUrl,
-      file: ''
+      file: '',
+      processing: false
     }
   },
   methods: {
@@ -113,6 +114,7 @@ const BaseFileUploader = {
       this.$refs.filename.innerHTML = this.file.name
     },
     submitFile() {
+      this.processing = true
       let formData = new FormData()
       formData.append('file', this.file);
 
@@ -139,7 +141,7 @@ const BaseFileUploader = {
         console.log(error.config)
       })
       .finally(() => {
-
+        this.processing = false
       })
     }
   },
@@ -154,6 +156,7 @@ const BaseFileUploader = {
     ref="file" 
     name="resume"
     @change="handleFileUpload"
+    :disabled="processing"
     >
 
     <span class="file-cta">
@@ -173,7 +176,14 @@ const BaseFileUploader = {
 
     </label>
 
-    <button class="button is-primary" @click.prevent="submitFile">Submit</button>
+    <button 
+    class="button is-primary"
+    v-bind:class="[{ 'is-loading': processing }]"
+    @click.prevent="submitFile"
+    :disabled="file == ''"
+    >
+    Submit
+    </button>
 
     </div>
   `
