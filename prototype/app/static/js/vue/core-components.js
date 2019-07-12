@@ -111,38 +111,44 @@ const BaseFileUploader = {
   methods: {
     handleFileUpload() {
       this.file = this.$refs.file.files[0]
+      // Set the input text.
       this.$refs.filename.innerHTML = this.file.name
     },
     submitFile() {
-      this.processing = true
-      let formData = new FormData()
-      formData.append('file', this.file);
+      if (this.validateFile()) {
+        this.processing = true
+        let formData = new FormData()
+        formData.append('file', this.file);
 
-      axios.post(
-        this.uploadUrl,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
+        axios.post(
+          this.uploadUrl,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
           }
-        }
-      )
-      .then(response => {
-        console.log(this.file)
-      })
-      .catch(error => {
-        if (error.response) {
-          console.log(error.response)
-        } else if (error.request) {
-          console.log(error.request)
-        } else {
-          console.log(error.message)
-        }
-        console.log(error.config)
-      })
-      .finally(() => {
-        this.processing = false
-      })
+        )
+        .then(response => {
+          console.log(this.file)
+        })
+        .catch(error => {
+          if (error.response) {
+            console.log(error.response)
+          } else if (error.request) {
+            console.log(error.request)
+          } else {
+            console.log(error.message)
+          }
+          console.log(error.config)
+        })
+        .finally(() => {
+          this.processing = false
+        })
+      }
+    },
+    validateFile() {
+      return true
     }
   },
   template: `
@@ -166,7 +172,9 @@ const BaseFileUploader = {
     </span>
 
     <span class="file-label">
+    <slot name="label-select-file">
     Choose a file
+    </slot>
     </span>
 
     </span>
@@ -182,7 +190,11 @@ const BaseFileUploader = {
     @click.prevent="submitFile"
     :disabled="file == ''"
     >
+
+    <slot name="label-submit">
     Submit
+    </slot>
+    
     </button>
 
     </div>

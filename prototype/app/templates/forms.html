@@ -7,10 +7,19 @@
 <div class="column is-5">
 {% csrf_token %}
 
-<file-uploader
-init-upload-url={% url 'api:upload' %}
+<audio-file-uploader
+init-upload-url={% url 'api:upload_audio_dbx' %}
 >
-</file-uploader>
+
+<template slot="label-select-file">
+{% trans 'label_select_audio_file' %}
+</template>
+
+<template slot="label-submit">
+{% trans 'label_submit_file' %}
+</template>
+
+</audio-file-uploader>
 
 </div>
 </div>

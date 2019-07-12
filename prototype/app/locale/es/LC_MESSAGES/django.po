@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-10 13:46-0700\n"
+"POT-Creation-Date: 2019-07-11 22:17-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: config/settings/base.py:91
+#: config/settings/base.py:92
 msgid "English"
 msgstr ""
 
-#: config/settings/base.py:92
+#: config/settings/base.py:93
 msgid "Spanish"
 msgstr ""
 
@@ -240,6 +240,18 @@ msgstr "Inicio"
 #: prototype/app/templates/base.html:163
 msgid "label_forms"
 msgstr "Formularios"
+
+#: prototype/app/templates/forms.html:15
+msgid "label_select_file"
+msgstr "Eligir un archivo"
+
+#: prototype/app/templates/forms.html:19 prototype/app/templates/forms.html:33
+msgid "label_submit_file"
+msgstr "Subir"
+
+#: prototype/app/templates/forms.html:29
+msgid "label_select_audio_file"
+msgstr "Eligir un archivo de audio"
 
 #: prototype/app/templates/home.html:6
 msgid "page_home_title"

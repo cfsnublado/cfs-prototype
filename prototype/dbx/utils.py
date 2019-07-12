@@ -1,5 +1,4 @@
 import dropbox
-from dropbox.exceptions import ApiError
 from dropbox.files import WriteMode
 
 from django.conf import settings
@@ -12,7 +11,7 @@ def get_dbx_object():
     return dbx
 
 
-def upload_file_to_dbx(local_filepath, dbx_filepath):
+def upload_file_to_dbx(local_filepath, dbx_filepath, create_shared_link=False):
     dbx = get_dbx_object()
 
     with open(local_filepath, 'rb') as upload_file:
@@ -21,3 +20,11 @@ def upload_file_to_dbx(local_filepath, dbx_filepath):
             dbx_filepath,
             mode=WriteMode('overwrite')
         )
+
+    if create_shared_link:
+        shared_link = dbx.sharing_create_shared_link(
+            path=dbx_filepath,
+            short_url=False,
+            pending_upload=None
+        )
+        print(shared_link)

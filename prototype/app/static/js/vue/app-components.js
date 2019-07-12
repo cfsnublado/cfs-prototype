@@ -52,3 +52,20 @@ const NavbarDropdown = {
 const FileUploader = {
   mixins: [BaseFileUploader]
 }
+
+const AudioFileUploader = {
+  mixins: [BaseFileUploader],
+  methods: {
+    validateFile() {
+      validated = false
+
+      if (this.file.type == 'audio/mpeg') {
+        validated = true
+      } else {
+        console.error('Invalid file type')
+      }
+      
+      return validated
+    }
+  }
+}
