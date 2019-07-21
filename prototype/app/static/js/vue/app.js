@@ -2,6 +2,12 @@ Vue.component('alert-message', AlertMessage)
 Vue.component('navbar-dropdown', NavbarDropdown)
 Vue.component('file-uploader', FileUploader)
 Vue.component('audio-file-uploader', AudioFileUploader)
+Vue.component('audio-player', AudioPlayer)
+
+// Dropbox
+Vue.component('dbx-user-files', DbxUserFiles)
+Vue.component('dbx-audio-file-uploader', DbxAudioFileUploader)
+
 
 // Instantiate main app instance.
 const vm = new Vue({

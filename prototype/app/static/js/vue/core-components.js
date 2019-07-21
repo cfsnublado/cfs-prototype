@@ -1,3 +1,25 @@
+const AjaxProcessMixin = {
+  data() {
+    return {
+      processing: false
+    }
+  },
+  methods: {
+    process() {
+      this.processing = true
+      this.$emit('ajax-process')
+    },
+    complete() {
+      this.processing = false
+      this.$emit('ajax-complete')
+    },
+    success(response) {
+      this.processing = false
+      this.$emit('ajax-success')
+    }
+  }
+}
+
 const ClickOutsideMixin = {
   methods: {
     onCloseOutside() {
@@ -95,6 +117,7 @@ const BaseDropdown = {
 }
 
 const BaseFileUploader = {
+  mixins: [AjaxProcessMixin],
   props: {
     initUploadUrl: {
       type: String,
@@ -105,7 +128,6 @@ const BaseFileUploader = {
     return {
       uploadUrl: this.initUploadUrl,
       file: '',
-      processing: false
     }
   },
   methods: {
@@ -116,7 +138,8 @@ const BaseFileUploader = {
     },
     submitFile() {
       if (this.validateFile()) {
-        this.processing = true
+        this.process()
+
         let formData = new FormData()
         formData.append('file', this.file);
 
@@ -131,6 +154,7 @@ const BaseFileUploader = {
         )
         .then(response => {
           console.log(this.file)
+          this.success(response)
         })
         .catch(error => {
           if (error.response) {
@@ -143,7 +167,7 @@ const BaseFileUploader = {
           console.log(error.config)
         })
         .finally(() => {
-          this.processing = false
+          this.complete()
         })
       }
     },

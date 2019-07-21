@@ -95,23 +95,6 @@ ref="navbarMenu"
 
 </div><!-- navbar-menu -->
 
-<!-- items visible in small screen -->
-<div 
-id="navbar-menu-small" 
-class="navbar-menu-small"
-ref="navbarMenuSmall"
->
-
-<div class="navbar-end-small">
-
-<a class="navbar-item">
-{% trans 'label_login' %}
-</a>
-
-</div>
-
-</div><!-- navbar-menu-small -->
-
 </nav><!-- navbar -->
 
 {% endblock navbar %}
@@ -195,6 +178,14 @@ General
 
 </div><!-- app-container -->
 
+<script>
+{% block python_to_javascript %}
+
+var appSessionUrl = "{% url 'app:app_session' %}";
+
+{% endblock python_to_javascript %}
+</script>
+
 {% block scripts %}
 <script>
 var sidebarExpanded = false;
@@ -205,6 +196,7 @@ var sidebarExpanded = false;
 <script src="{% static 'js/vue.js' %}"></script>
 <script src="{% static 'js/vue/core-components.js' %}"></script>
 <script src="{% static 'js/vue/app-components.js' %}"></script>
+<script src="{% static 'js/vue/dbx-components.js' %}"></script>
 <script src="{% static 'js/vue/app.js' %}"></script>
 {% endblock scripts %}
 

@@ -3,12 +3,13 @@
 
 {% block content %}
 
-<div class="columns">
-<div class="column is-5">
+<div class="columns is-multiline">
+
+<div class="column is-6 is-offset-3">
 {% csrf_token %}
 
-<audio-file-uploader
-init-upload-url={% url 'api:upload_audio_dbx' %}
+<dbx-audio-file-uploader
+init-upload-url={% url 'api:dbx_upload_audio' %}
 >
 
 <template slot="label-select-file">
@@ -19,9 +20,19 @@ init-upload-url={% url 'api:upload_audio_dbx' %}
 {% trans 'label_submit_file' %}
 </template>
 
-</audio-file-uploader>
+</dbx-audio-file-uploader>
 
 </div>
+
+<div class="column is-6 is-offset-3">
+<dbx-user-files
+files-url="{% url 'api:dbx_user_files' %}"
+shared-link-url="{% url 'api:dbx_shared_link' %}"
+>
+</dbx-user-files>
+</div>
+
+
 </div>
 
 {% endblock content %}

@@ -1,3 +1,5 @@
+import json
+
 import magic
 from dropbox.exceptions import ApiError
 from rest_framework import status
@@ -9,7 +11,10 @@ from rest_framework.views import APIView
 from django.conf import settings
 
 from core.api.views_api import APIDefaultsMixin
-from ..utils import upload_file_to_dbx
+from ..utils import (
+    get_dbx_object, get_dbx_shared_link, get_user_dbx_files_json,
+    upload_file_to_dbx
+)
 
 
 def check_in_memory_mime(in_memory_file):
@@ -21,7 +26,40 @@ def check_in_memory_mime(in_memory_file):
     return mime
 
 
-class UploadDbxView(
+class DbxSharedLinkView(
+    APIDefaultsMixin, APIView
+):
+    permission_classes = [IsAdminUser]
+
+    def post(self, request, *args, **kwargs):
+        dbx_token = settings.DBX['ACCESS_TOKEN']
+        dbx = get_dbx_object(dbx_token)
+        data = request.data
+
+        if 'dbx_path' not in data:
+            raise ParseError('dbx_path required in post data')
+
+        shared_link = get_dbx_shared_link(dbx, data['dbx_path'])
+
+        return Response(data={'shared_link': shared_link.url}, status=status.HTTP_200_OK)
+
+
+class DbxUserFilesView(
+    APIDefaultsMixin, APIView
+):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request, *args, **kwargs):
+        dbx_token = settings.DBX['ACCESS_TOKEN']
+        try:
+            files = get_user_dbx_files_json(dbx_token, request.user.id)
+        except ApiError:
+            raise APIException('User directory not found.')
+
+        return Response(data={'files': files}, status=status.HTTP_200_OK)
+
+
+class DbxUploadView(
     APIDefaultsMixin, APIView
 ):
     permission_classes = [IsAdminUser]
@@ -32,6 +70,7 @@ class UploadDbxView(
     create_shared_link = False
 
     def post(self, request, *args, **kwargs):
+        dbx_token = settings.DBX['ACCESS_TOKEN']
         data = request.data
 
         if 'file' not in data:
@@ -53,7 +92,9 @@ class UploadDbxView(
                 tmp_upload_file.write(chunk)
 
         try:
-            upload_file_to_dbx(
+            dbx = get_dbx_object(dbx_token)
+            shared_link = upload_file_to_dbx(
+                dbx,
                 tmp_filepath,
                 dbx_filepath,
                 create_shared_link=self.create_shared_link
@@ -61,9 +102,9 @@ class UploadDbxView(
         except ApiError:
             raise APIException('Upload dbx error')
 
-        return Response(data={}, status=status.HTTP_200_OK)
+        return Response(data={'shared_link': shared_link.url}, status=status.HTTP_200_OK)
 
 
-class UploadAudioDbxView(UploadDbxView):
+class DbxUploadAudioView(DbxUploadView):
     allowed_mime_types = ['audio/mpeg']
     create_shared_link = True
