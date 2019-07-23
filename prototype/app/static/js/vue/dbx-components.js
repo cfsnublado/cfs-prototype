@@ -1,12 +1,51 @@
+const Dbx = {
+  props: {
+    sharedLinkUrl: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      processing: false
+    }
+  },
+  methods: {
+    getSharedLink(dbxPath) {
+      this.processing = true
+
+      axios.post(
+        this.sharedLinkUrl,
+        {'dbx_path': dbxPath}
+      )
+      .then(response => {
+        if (response.data['shared_link']) {
+          this.$refs['audio-url'].value = response.data['shared_link'].replace('dl=0', 'dl=1')
+        }
+      })
+      .catch(error => {
+        if (error.response) {
+          console.log(error.response)
+        } else if (error.request) {
+          console.log(error.request)
+        } else {
+          console.log(error)
+        }
+        console.log(error.config)
+      })
+      .finally(() => {
+        this.processing = false
+      })
+    }
+  },
+}
+
+
 const DbxUserFiles = {
   props: {
     filesUrl: {
       type: String,
       required: true
-    },
-    sharedLinkUrl: {
-      type: String,
-      default: ''
     },
   },
   data() {
@@ -23,7 +62,6 @@ const DbxUserFiles = {
       axios.get(this.filesUrl)
       .then(response => {
         this.files = response.data.files
-        console.log(this.files)
       })
       .catch(error => {
         if (error.response) {
@@ -39,36 +77,12 @@ const DbxUserFiles = {
         this.processing = false
       })
     },
-    getSharedLink(path) {
-      this.processing = true
-
-      axios.post(
-        this.sharedLinkUrl,
-        {'dbx_path': path}
-      )
-      .then(response => {
-        console.log(response.data)
-        this.$refs['audio-url'].value = response.data['shared_link']
-      })
-      .catch(error => {
-        if (error.response) {
-          console.log(error.response)
-        } else if (error.request) {
-          console.log(error.request)
-        } else {
-          console.log(error.message)
-        }
-        console.log(error.config)
-      })
-      .finally(() => {
-        this.processing = false
-      })
+    selectFile(file) {
+      this.$emit('select-file', file)
     }
   },
   template: `
     <div>
-
-    <input class="input" ref="audio-url" name="audio-url">
 
     <button
     class="button is-primary"
@@ -82,11 +96,11 @@ const DbxUserFiles = {
 
     <ul class="menu-list">
 
-    <li v-for="(item, index) in files">
+    <li v-for="(file, index) in files">
     <a
-    @click.prevent="getSharedLink(item.path_lower)"
+    @click.prevent="selectFile(file)"
     > 
-    {{ item.name }} 
+    {{ file.name }} 
     </a>
     </li>
 
@@ -102,13 +116,13 @@ const DbxAudioFileUploader = {
   mixins: [AudioFileUploader],
   data() {
     return {
-      sharedLink: ''
+      fileMetadata: ''
     }
   },
   methods: {
     success(response) {
-      console.log(response)
-      this.sharedLink = response.data['shared_link']
+      this.fileMetadata = response.data['file_metadata']
+      this.$emit('upload-file', this.fileMetadata)
     }
   },
   template: `
@@ -159,10 +173,6 @@ const DbxAudioFileUploader = {
     
     </button>
 
-    </div>
-
-    <div style="font-size: 20px;">
-    {{ sharedLink }}
     </div>
 
     </div>

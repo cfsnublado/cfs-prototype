@@ -67,16 +67,15 @@ class DbxUploadView(
         'text/plain', 'text/markdown',
         'application/pdf', 'audio/mpeg'
     ]
-    create_shared_link = False
 
     def post(self, request, *args, **kwargs):
         dbx_token = settings.DBX['ACCESS_TOKEN']
-        data = request.data
+        file_metadata = ''
 
-        if 'file' not in data:
+        if 'file' not in request.data:
             raise ParseError('Empty content')
 
-        file = data['file']
+        file = request.data['file']
         mime = check_in_memory_mime(file)
 
         if mime not in self.allowed_mime_types:
@@ -93,18 +92,19 @@ class DbxUploadView(
 
         try:
             dbx = get_dbx_object(dbx_token)
-            shared_link = upload_file_to_dbx(
+            file_metadata = upload_file_to_dbx(
                 dbx,
                 tmp_filepath,
                 dbx_filepath,
-                create_shared_link=self.create_shared_link
             )
         except ApiError:
             raise APIException('Upload dbx error')
 
-        return Response(data={'shared_link': shared_link.url}, status=status.HTTP_200_OK)
+        return Response(
+            data={'file_metadata': file_metadata},
+            status=status.HTTP_200_OK
+        )
 
 
 class DbxUploadAudioView(DbxUploadView):
     allowed_mime_types = ['audio/mpeg']
-    create_shared_link = True

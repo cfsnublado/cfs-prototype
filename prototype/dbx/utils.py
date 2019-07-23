@@ -25,25 +25,22 @@ def get_dbx_shared_link(dbx, path, short_url=False, pending_upload=None):
     return shared_link
 
 
-def upload_file_to_dbx(
-    dbx,
-    local_filepath,
-    dbx_filepath,
-    create_shared_link=False
-):
-    shared_link = ''
-
+def upload_file_to_dbx(dbx, local_filepath, dbx_filepath):
     with open(local_filepath, 'rb') as upload_file:
-        dbx.files_upload(
+        file_data = dbx.files_upload(
             upload_file.read(),
             dbx_filepath,
             mode=WriteMode('overwrite')
         )
+        file_metadata = {
+            'id': file_data.id,
+            'name': file_data.name,
+            'path_lower': file_data.path_lower,
+            'path_display': file_data.path_display,
+            'media_info': file_data.media_info
+        }
 
-    if create_shared_link:
-        shared_link = get_dbx_shared_link(dbx, dbx_filepath)
-
-    return shared_link
+        return file_metadata
 
 
 def get_dbx_files(dbx, rel_path=''):

@@ -8,8 +8,17 @@
 <div class="column is-6 is-offset-3">
 {% csrf_token %}
 
+<dbx
+shared-link-url="{% url 'api:dbx_shared_link' %}"
+inline-template
+>
+<div>
+
+<input class="input" ref="audio-url" name="audio-url">
+
 <dbx-audio-file-uploader
 init-upload-url={% url 'api:dbx_upload_audio' %}
+@upload-file="getSharedLink($event.path_lower)"
 >
 
 <template slot="label-select-file">
@@ -22,16 +31,16 @@ init-upload-url={% url 'api:dbx_upload_audio' %}
 
 </dbx-audio-file-uploader>
 
-</div>
-
-<div class="column is-6 is-offset-3">
 <dbx-user-files
 files-url="{% url 'api:dbx_user_files' %}"
-shared-link-url="{% url 'api:dbx_shared_link' %}"
+@select-file="getSharedLink($event.path_lower)"
 >
 </dbx-user-files>
-</div>
 
+</div>
+</dbx>
+
+</div>
 
 </div>
 
